@@ -44,4 +44,20 @@ describe('any-api routes', () => {
 
     expect(res.body).toEqual(car);
   });
+
+  it('should be able to update a car by id', async () => {
+    const car = await Car.insert({ make: 'Nissan', model: 'GT-R' });
+    const res = await request(app)
+      .patch(`/api/v1/cars/${car.id}`)
+      .send({ make: 'Ferrari', model: '458 Italia' });
+
+    const expected = {
+      id: expect.any(String),
+      make: 'Ferrari',
+      model: '458 Italia',
+    };
+
+    expect(res.body).toEqual(expected);
+    expect(await Car.getById(car.id)).toEqual(expected);
+  });
 });
