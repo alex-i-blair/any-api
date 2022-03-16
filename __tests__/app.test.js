@@ -60,4 +60,12 @@ describe('any-api routes', () => {
     expect(res.body).toEqual(expected);
     expect(await Car.getById(car.id)).toEqual(expected);
   });
+
+  it('should be able to delete a car', async () => {
+    const car = await Car.insert({ make: 'Nissan', model: 'GT-R' });
+    const res = await request(app).delete(`/api/v1/cars/${car.id}`);
+
+    expect(res.body).toEqual(car);
+    expect(await Car.getById(car.id)).toBeNull();
+  });
 });
